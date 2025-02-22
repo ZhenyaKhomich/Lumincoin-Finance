@@ -41,6 +41,7 @@ input.form-control:focus {
     border-left: 1px solid #ced4da;
     border-top: 1px solid #ced4da;
     border-bottom: 1px solid #ced4da;
+    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
 }
 input.form-control {
     border-left: none;
@@ -56,7 +57,6 @@ input.form-control:focus {
     position: relative;
     z-index: 3;
     box-shadow: -3px 0px 0px 3px rgba(13, 110, 253, 0.25);
-    transition: all 0.2s ease-in-out;
     border-left: 1px solid #80bdff;
     border-top: 1px solid #80bdff;
     border-bottom: 1px solid #80bdff;
