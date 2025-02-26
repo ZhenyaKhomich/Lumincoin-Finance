@@ -12,15 +12,15 @@
 <!--<div class="content d-flex m-auto">-->
 
 
-<div class=" sidebar d-flex flex-column flex-shrink-0 p-3 bg-body-tertiary" style="width: 280px;">
+<div class=" sidebar d-flex flex-column flex-shrink-0 p-3 pe-0 ps-0 bg-white layout">
     <a href="/"
        class="d-flex justify-content-center align-items-center mb-3 mt-3 link-body-emphasis text-decoration-none">
         <img src="../../src/static/images/logo.png" alt="logo">
     </a>
     <hr>
     <ul class="nav nav-pills flex-column mb-auto mt-4">
-        <li>
-            <a href="#" class="nav-link mt-2 pt-3 pb-3 d-flex align-items-center">
+        <li class="ps-3 pe-3">
+            <a href="#" class="nav-link mt-2 pt-2 pb-2 d-flex align-items-center">
                 <svg class="me-2" width="15" height="14" viewBox="0 0 15 14" fill="none"
                      xmlns="http://www.w3.org/2000/svg">
                     <path fill-rule="evenodd" clip-rule="evenodd"
@@ -36,8 +36,8 @@
                 Главная
             </a>
         </li>
-        <li>
-            <a href="#" class="nav-link pt-3 pb-3 d-flex align-items-center">
+        <li class="ps-3 pe-3">
+            <a href="#" class="nav-link pt-2 pb-2 d-flex align-items-center">
                 <svg class="me-2" width="16" height="16" viewBox="0 0 16 16" fill="none"
                      xmlns="http://www.w3.org/2000/svg">
                     <path fill-rule="evenodd" clip-rule="evenodd"
@@ -53,25 +53,25 @@
                 Доходы & Расходы
             </a>
         </li>
-        <div class="container">
-            <details class="bg-light  rounded">
-                <summary class="font-weight-bold summary-name pt-3 pb-2">Категории</summary>
-                <a href="#" class="nav-link  pt-2 pb-2 ps-0">Доходы</a>
-                <a href="#" class="nav-link pt-2 pb-2 ps-0">Расходы</a>
+        <div class="container-category ps-3 pe-3">
+            <details class="bg-light  rounded  bg bg-white">
+                <summary class="font-weight-bold summary-name rounded pt-2 ps-3 pe-3 pb-2">Категории</summary>
+                <a href="#" class="nav-link  pt-2 pb-2 ps-3">Доходы</a>
+                <a href="#" class="nav-link pt-2 pb-2 ps-3">Расходы</a>
             </details>
         </div>
     </ul>
-    <div class="balance">
+    <div class="balance ps-3">
         Баланс: <span>500$</span>
     </div>
     <hr>
-    <div class="dropdown d-flex align-items-center person-sandbar">
+    <div class="dropdown d-flex align-items-center person-sandbar ps-3">
         <a href="#" class="d-flex align-items-center link-dark text-decoration-none" id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false">
             <i class="far fa-user rounded-circle text-secondary me-3 p-2"></i>
-            <strong>Роман Чернов</strong>
+            Роман Чернов
         </a>
         <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2">
-            <li><a class="dropdown-item" href="#">Logout</a></li>
+            <li><a class="dropdown-item" href="#">Выход</a></li>
         </ul>
     </div>
     <div class="burger">

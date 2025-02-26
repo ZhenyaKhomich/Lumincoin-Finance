@@ -52,7 +52,7 @@ const ctx2 = document.getElementById('myChart2');
 new Chart(ctx2, {
     type: 'pie',
     data: {
-        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Orange', ''],
+        labels: ['Red', 'Orange', 'Yellow', 'Green', 'Blue', ''],
         datasets: [{
             data: [12, 19, 3, 5, 2, 0],
             backgroundColor: [

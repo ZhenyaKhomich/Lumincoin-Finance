@@ -3,6 +3,11 @@ body {
     height: 100%;
 }
 
+.layout {
+    border-right: 1px solid #d9d9d9;
+    width: 220px;
+}
+
 .nav-link, .summary-name {
     font-weight: 400;
     font-size: 14px;
@@ -18,7 +23,7 @@ summary::after{
     font-family: 'Font Awesome 5 Free';
     font-weight: 600;
     font-size: 15px;
-    margin-left: 140px;
+    margin-left: 75px;
     transform: rotate(180deg);
 }
 
@@ -51,6 +56,8 @@ details[open] summary::after {
 .sidebar {
     transition: all 0.3s ease;
     position: relative;
+    display: flex;
+    height: 100vh;
 }
 
 .burger {
@@ -87,7 +94,7 @@ details[open] summary::after {
 @media (max-width: 1000px) {
     .sidebar {
         position: absolute;
-        transform: translate(-280px);
+        transform: translate(-220px);
     }
 
     .burger {
