@@ -1,3 +1,6 @@
+@use "layout";
+@use "common";
+
 html,
 body {
   height: 100%;
@@ -31,6 +34,7 @@ input.form-control:focus {
   font-size: 15px;
   line-height: 1px;
 }
+
 .wrap-icon {
   border-top-left-radius: 5px;
   border-bottom-left-radius: 5px;
@@ -43,6 +47,7 @@ input.form-control:focus {
   border-bottom: 1px solid #ced4da;
   transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
 }
+
 input.form-control {
   border-left: none;
 }
@@ -61,6 +66,8 @@ input.form-control:focus {
   border-top: 1px solid #80bdff;
   border-bottom: 1px solid #80bdff;
 }
+
+
 
 
 
