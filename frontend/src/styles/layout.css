@@ -56,8 +56,8 @@ details[open] summary::after {
 .sidebar {
     transition: all 0.3s ease;
     position: relative;
-    display: flex;
-    height: 100vh;
+    /*display: flex;*/
+    /*height: 100vh;*/
 }
 
 .burger {
@@ -89,6 +89,16 @@ details[open] summary::after {
     height: 2px;
     position: absolute;
     top: 8px;
+}
+
+details {
+    border: 1px solid #0d6efd;;
+    border-radius: 10px;
+}
+
+.checkout-category {
+    background-color: #0d6efd;
+    color: white;
 }
 
 @media (max-width: 1000px) {
