@@ -1,9 +1,17 @@
+.content {
+  height: auto;
+}
+
 .content-main {
   display: flex;
 }
 
 canvas {
   width: 444px;
+}
+
+.wrap-container {
+  height: 100%;
 }
 
 .wrap-container-title, .graphic-title, .table th {
@@ -60,6 +68,16 @@ canvas {
   background: #d9d9d9;
   margin-left: 84px;
   margin-right: 84px;
+}
+
+table.table {
+  td, th {
+    text-align: center;
+  }
+}
+
+.auth-wrap {
+  height: 100vh;
 }
 
 @media screen and (max-width: 1200px) {
