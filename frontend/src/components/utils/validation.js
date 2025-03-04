@@ -16,10 +16,17 @@ export class Validation {
 
             if (inputElement.value !== '') {
                 if(inputElement.type === 'text') {
-                    date.nameInputElement = inputElement.value;
-                    inputElement.classList.remove('invalid');
-                    iconInputElement.classList.remove('invalid');
-                    parentInputElement.nextElementSibling.classList.remove('invalid');
+                    if(inputElement.value.match(/^[А-ЯЁ][а-яё]*(?:\s[А-ЯЁ][а-яё]*)+$/)) {
+                        date.nameInputElement = inputElement.value;
+                        inputElement.classList.remove('invalid');
+                        iconInputElement.classList.remove('invalid');
+                        parentInputElement.nextElementSibling.classList.remove('invalid');
+                    } else {
+                        inputElement.classList.add('invalid');
+                        iconInputElement.classList.add('invalid');
+                        parentInputElement.nextElementSibling.classList.add('invalid');
+                        isValid = false;
+                    }
                 }
                 if (inputElement.type === 'email') {
                     if (inputElement.value && inputElement.value.match(/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]{2,}$/)) {
@@ -33,13 +40,13 @@ export class Validation {
                         parentInputElement.nextElementSibling.classList.add('invalid');
                         isValid = false;
                     }
-                } else {
+                } else if(inputElement.type !== 'text')  {
                     inputElement.classList.remove('invalid');
                     iconInputElement.classList.remove('invalid');
                     parentInputElement.nextElementSibling.classList.remove('invalid');
                 }
-                if (inputElement.type === 'password') {
-                    if (inputElement.value.length >= 6 && password === '') {
+                if (inputElement.type === 'password' ) {
+                    if (inputElement.value.match(/^(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/) && password === '') {
                         date.passwordInputElement = inputElement.value;
                         inputElement.classList.remove('invalid');
                         iconInputElement.classList.remove('invalid');
