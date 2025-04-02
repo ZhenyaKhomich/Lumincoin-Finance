@@ -1,6 +1,7 @@
 const path = require('path');
 const CopyPlugin = require("copy-webpack-plugin");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const flatpickr = require("flatpickr");
 
 module.exports = {
     entry: './src/app.js',
@@ -27,13 +28,15 @@ module.exports = {
                 {from: "./node_modules/bootstrap/dist/css/bootstrap.min.css", to: "css"},
                 {from: "./node_modules/fontawesome-free/webfonts", to: "webfonts" },
                 {from: "./node_modules/fontawesome-free/css/all.min.css", to: "css"},
+                {from: "./node_modules/flatpickr/dist/flatpickr.min.css", to: "css"},
+                {from: "./node_modules/flatpickr/dist/flatpickr.min.js", to: "js"},
             ],
         }),
     ],
     module: {
         rules: [
             {
-                test: /\.scss$/i,
+                test: /\.(css|scss)$/i,
                 use: [
                     "style-loader",
                     "css-loader",

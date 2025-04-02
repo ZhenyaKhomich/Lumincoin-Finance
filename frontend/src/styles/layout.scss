@@ -27,7 +27,7 @@ details summary {
   list-style-type: none
 }
 
-summary::after{
+summary::after {
   content: '\f054';
   font-family: 'Font Awesome 5 Free';
   font-weight: 600;
@@ -59,7 +59,7 @@ details[open] summary::after {
   color: #052c65;
 }
 
-.person-sandbar  {
+.person-sandbar {
   position: relative;
 }
 
@@ -77,6 +77,7 @@ details[open] summary::after {
   top: 4px;
   right: 0;
 }
+
 .exit-layout:hover {
   background: #5ba11a;
 }
@@ -111,6 +112,41 @@ details[open] summary::after {
   position: absolute;
   top: 8px;
 }
+
+
+li.checked a {
+  background-color: #0d6efd;
+  color: white;
+
+  svg {
+    fill: white;
+  }
+}
+
+li.checked-category a{
+  background-color: #0d6efd;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  color: white;
+}
+
+details.checked {
+  border: 1px solid #0d6efd;
+
+  .summary-name {
+    background-color: #0d6efd;
+    color: white;
+  }
+}
+.nav-pills details .nav-link {
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
+}
+
+.nav-pills .rounded .open {
+  border-radius: 0!important;
+}
+
 
 @media (max-width: 1000px) {
   .sidebar {

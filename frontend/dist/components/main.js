@@ -1,12 +1,21 @@
+import {Period} from "./utils/period";
+import Chart from 'chart.js/auto';
+
+
 export class Main {
-    constructor() {
+    constructor(result) {
+        this.result = result;
         this.paintDiagramms();
+        new Period();
+
     }
 
     paintDiagramms() {
         const ctx = document.getElementById('myChart');
-
-        new Chart(ctx, {
+        if (this.chartIncomes) {
+            this.chartIncomes.destroy();
+        }
+        this.chartIncomes = new Chart(ctx, {
             type: 'pie',
             data: {
                 labels: ['Red', 'Orange', 'Yellow', 'Green', 'Blue', ''],
@@ -26,8 +35,10 @@ export class Main {
 
 
         const ctx2 = document.getElementById('myChart2');
-
-        new Chart(ctx2, {
+        if (this.chartExpenses) {
+            this.chartExpenses.destroy();
+        }
+        this.chartExpenses = new Chart(ctx2, {
             type: 'pie',
             data: {
                 labels: ['Red', 'Orange', 'Yellow', 'Green', 'Blue', ''],

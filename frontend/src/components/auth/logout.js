@@ -1,5 +1,5 @@
 import {config} from "../../config/config";
-import {AuthTokens} from "../../utils/auth-utils";
+import {AuthTokens} from "../utils/auth-utils";
 
 export class Logout {
     isBlock = true;

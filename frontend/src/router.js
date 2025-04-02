@@ -1,8 +1,19 @@
-import {Main} from "./components/main.js";
 import {Login} from "./components/auth/login";
 import {SignUp} from "./components/auth/sign-up";
-import {AuthTokens} from "./utils/auth-utils";
+import {AuthTokens} from "./components/utils/auth-utils";
 import {Logout} from "./components/auth/logout";
+import {Expenses} from "./components/expenses/expenses";
+import {Incomes} from "./components/incomes/incomes";
+import {EditCarts} from "./components/categories/editCarts";
+import {url} from "./config/config";
+import {AddCart} from "./components/categories/addCarts";
+import {DeleteCart} from "./components/categories/deleteCarts";
+import {Response} from "./components/utils/response-utils";
+import {Generals} from "./components/generals/generals";
+import {EditGeneralOperation} from "./components/generals/editGeneralOperation";
+import {CreateGeneralOperation} from "./components/generals/createGeneralOperation";
+import {DeleteGeneralElement} from "./components/generals/deleteGeneralElement";
+import {Layout} from "./components/layout";
 
 export class Router {
     constructor() {
@@ -18,7 +29,8 @@ export class Router {
                 filePathTemplate: '/templates/main.html',
                 useLayout: '/templates/layout.html',
                 load: () => {
-                    new Main();
+                    new Generals()
+                    // new Main();
                 },
             },
             {
@@ -48,6 +60,7 @@ export class Router {
                 filePathTemplate: '/templates/pages/expenses/main.html',
                 useLayout: '/templates/layout.html',
                 load: () => {
+                    new Expenses();
                 },
             },
             {
@@ -56,6 +69,7 @@ export class Router {
                 filePathTemplate: '/templates/pages/expenses/create.html',
                 useLayout: '/templates/layout.html',
                 load: () => {
+                    new AddCart(this.openNewRouteAutomatic.bind(this), url.changeExpenses, '/expenses');
                 },
             },
             {
@@ -64,6 +78,7 @@ export class Router {
                 filePathTemplate: '/templates/pages/expenses/edit.html',
                 useLayout: '/templates/layout.html',
                 load: () => {
+                    new EditCarts(this.openNewRouteAutomatic.bind(this), url.changeExpenses, '/expenses');
                 },
             },
             {
@@ -73,6 +88,8 @@ export class Router {
                 useLayout: '/templates/layout.html',
                 usePopup: '/templates/pages/expenses/popup.html',
                 load: () => {
+                    new Expenses();
+                    new DeleteCart(this.openNewRouteAutomatic.bind(this), url.changeExpenses, '/expenses');
                 },
             },
             {
@@ -81,6 +98,7 @@ export class Router {
                 filePathTemplate: '/templates/pages/generals/main.html',
                 useLayout: '/templates/layout.html',
                 load: () => {
+                    new Generals();
                 },
             },
             {
@@ -89,6 +107,7 @@ export class Router {
                 filePathTemplate: '/templates/pages/generals/create.html',
                 useLayout: '/templates/layout.html',
                 load: () => {
+                    new CreateGeneralOperation(this.openNewRouteAutomatic.bind(this), url.urlGenerals, '/generals');
                 },
             },
             {
@@ -97,6 +116,7 @@ export class Router {
                 filePathTemplate: '/templates/pages/generals/edit.html',
                 useLayout: '/templates/layout.html',
                 load: () => {
+                    new EditGeneralOperation(this.openNewRouteAutomatic.bind(this), url.urlGenerals + '/', '/generals');
                 },
             },
             {
@@ -106,6 +126,8 @@ export class Router {
                 useLayout: '/templates/layout.html',
                 usePopup: '/templates/pages/generals/popup.html',
                 load: () => {
+                    new Generals();
+                    new DeleteGeneralElement(this.openNewRouteAutomatic.bind(this), url.urlGenerals + '/', '/generals');
                 },
             },
             {
@@ -114,6 +136,7 @@ export class Router {
                 filePathTemplate: '/templates/pages/incomes/main.html',
                 useLayout: '/templates/layout.html',
                 load: () => {
+                    new Incomes();
                 },
             },
             {
@@ -122,6 +145,7 @@ export class Router {
                 filePathTemplate: '/templates/pages/incomes/create.html',
                 useLayout: '/templates/layout.html',
                 load: () => {
+                    new AddCart(this.openNewRouteAutomatic.bind(this), url.changeIncomes, '/incomes');
                 },
             },
             {
@@ -130,6 +154,7 @@ export class Router {
                 filePathTemplate: '/templates/pages/incomes/edit.html',
                 useLayout: '/templates/layout.html',
                 load: () => {
+                    new EditCarts(this.openNewRouteAutomatic.bind(this), url.changeIncomes, '/incomes');
                 },
             },
             {
@@ -139,15 +164,18 @@ export class Router {
                 useLayout: '/templates/layout.html',
                 usePopup: '/templates/pages/incomes/popup.html',
                 load: () => {
+                    new Incomes();
+                    new DeleteCart(this.openNewRouteAutomatic.bind(this), url.changeIncomes, '/incomes');
                 },
             },
         ]
     }
-   
+
     initEvents() {
         window.addEventListener("DOMContentLoaded", this.activateRoute.bind(this));
         window.addEventListener("popstate", this.activateRoute.bind(this));
         document.addEventListener('click', this.openNewRouteToClick.bind(this));
+        this.refreshTokenAutomatic();
     }
 
     async openNewRouteAutomatic(url) {
@@ -159,14 +187,14 @@ export class Router {
         let element = null;
         if (e.target.nodeName === 'A') {
             element = e.target;
-        } else if(e.target.parentNode.nodeName === 'A') {
+        } else if (e.target.parentNode.nodeName === 'A') {
             element = e.target.parentNode;
         }
 
-        if(element) {
+        if (element) {
             e.preventDefault();
             const url = element.href.replace(window.location.origin, '');
-            if(!element.href || element.href === '#' || element.href === 'javascript:void(0)') {
+            if (!element.href || element.href === '#' || element.href === 'javascript:void(0)') {
                 return;
             }
             await this.openNewRouteAutomatic(url);
@@ -176,14 +204,15 @@ export class Router {
     async activateRoute() {
         const urlRoute = window.location.pathname;
         let newRoute = null;
-        if(localStorage.getItem("accessToken")) {
+        if (localStorage.getItem("accessToken")) {
+            this.refreshTokenAutomatic();
             newRoute = this.routes.find((route) => route.route === urlRoute);
         } else {
             newRoute = this.routes.find((route) => route.route === '/login');
-            if(urlRoute === '/sign-up') {
+            if (urlRoute === '/sign-up') {
                 newRoute = this.routes.find((route) => route.route === '/sign-up');
             }
-            if(urlRoute === '/login') {
+            if (urlRoute === '/login') {
                 newRoute = this.routes.find((route) => route.route === '/login');
             }
         }
@@ -197,6 +226,20 @@ export class Router {
                 this.contentElement.innerHTML = await fetch(newRoute.useLayout).then(res => res.text());
                 const userInfo = JSON.parse(localStorage.getItem("userInfo"));
                 document.getElementById('layoutUserName').innerText = userInfo.name;
+
+                try {
+                    const result = await Response.getElementsFromBackend('GET', '/balance', AuthTokens.getToken(AuthTokens.accessTokenKey));
+
+                    if (result && typeof result.balance !== 'undefined') {
+                        document.getElementById('userBalance').innerText = result.balance + ' $';
+                    } else {
+                        document.getElementById('userBalance').innerText = '0 $';
+                    }
+                } catch (error) {
+                    console.error("Ошибка при получении баланса:", error);
+                    document.getElementById('userBalance').innerText = 'Ошибка загрузки';
+                }
+
             } else {
                 this.contentElement.innerHTML = '';
             }
@@ -213,12 +256,19 @@ export class Router {
                 newRoute.load();
             }
 
-            if(newRoute.useLayout) {
+            if (newRoute.useLayout) {
                 new Logout(this.openNewRouteAutomatic.bind(this));
+                new Layout();
             }
 
         } else {
             window.location = '/404';
         }
+    }
+
+    refreshTokenAutomatic() {
+        setInterval(() => {
+            AuthTokens.refreshToken().then();
+        }, 250000)
     }
 }

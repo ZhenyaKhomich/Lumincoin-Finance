@@ -1,5 +1,5 @@
 import {Validation} from "../utils/validation";
-import {AuthTokens} from "../../utils/auth-utils";
+import {AuthTokens} from "../utils/auth-utils";
 
 export class Login {
     constructor(openNewRouteAutomatic) {
@@ -15,18 +15,19 @@ export class Login {
             const date = Validation.validForm(this.inputsElement);
 
             const result = await AuthTokens.getTokensAfterRegistration(date.emailInputElement, date.passwordInputElement, this.rememberMeInput.checked);
+            if (result) {
+                if (result.error || !result.tokens || !result.user) {
+                    this.errorLogin.innerText = result.message;
+                    return;
+                } else {
+                    this.errorLogin.innerText = '';
+                }
 
-            if (result.error || !result.tokens || !result.user) {
-                this.errorLogin.innerText = result.message;
-                return;
-            } else {
-                this.errorLogin.innerText = '';
+                this.openNewRouteAutomatic('/');
+                return
+
             }
-
-            this.openNewRouteAutomatic('/');
-
-        } else {
-            alert('Ошибка при запросе на сервер. Попробуйте снова!');
+                alert('Ошибка при запросе на сервер. Попробуйте снова!');
         }
     }
 }

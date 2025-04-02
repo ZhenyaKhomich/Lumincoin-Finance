@@ -34,7 +34,7 @@ canvas {
 }
 
 .popup-container {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;
@@ -74,10 +74,42 @@ table.table {
   td, th {
     text-align: center;
   }
+
+  td a {
+    text-decoration: none;
+  }
 }
 
 .auth-wrap {
   height: 100vh;
+}
+
+select.form-control {
+  width: 397px;
+}
+
+select:focus {
+ color: black;
+}
+
+.dataInput {
+  max-width: 90px;
+  height: 37px;
+  border: none;
+  text-align: center;
+
+  &::placeholder {
+    font-size: 21px;
+    text-decoration: underline;
+  }
+}
+.btn-period:disabled {
+  background: #6c757d;
+  color: white;
+}
+
+input.inactive {
+  pointer-events: none;
 }
 
 @media screen and (max-width: 1200px) {
@@ -85,3 +117,5 @@ table.table {
     width: 30vw;
   }
 }
+
+

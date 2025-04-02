@@ -1,6 +1,6 @@
 import {Validation} from "../utils/validation";
 import {config} from "../../config/config";
-import {AuthTokens} from "../../utils/auth-utils";
+import {AuthTokens} from "../utils/auth-utils";
 
 export class SignUp {
     password = '';
@@ -40,7 +40,7 @@ export class SignUp {
                 this.errorSignUp.innerText = '';
             }
 
-            const resultToken = await AuthTokens.getTokensAfterRegistration(result.user.email, date.passwordInputElement);
+            await AuthTokens.getTokensAfterRegistration(result.user.email, date.passwordInputElement);
 
             this.openNewRouteAutomatic('/');
 

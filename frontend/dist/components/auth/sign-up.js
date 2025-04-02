@@ -1,6 +1,6 @@
 import {Validation} from "../utils/validation";
 import {config} from "../../config/config";
-import {AuthTokens} from "../../utils/auth-utils";
+import {AuthTokens} from "../utils/auth-utils";
 
 export class SignUp {
     password = '';
@@ -39,11 +39,6 @@ export class SignUp {
             } else {
                 this.errorSignUp.innerText = '';
             }
-
-            // AuthTokens.setToken('name', result.user.name);
-            // AuthTokens.setToken('email', result.user.email);
-            // AuthTokens.setToken('password', date.passwordInputElement);
-            // AuthTokens.setToken('id', result.user.id);
 
             const resultToken = await AuthTokens.getTokensAfterRegistration(result.user.email, date.passwordInputElement);
 

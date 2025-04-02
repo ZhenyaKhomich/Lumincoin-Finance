@@ -1,5 +1,5 @@
 import {config} from "../../config/config";
-import {AuthTokens} from "../../utils/auth-utils";
+import {AuthTokens} from "../utils/auth-utils";
 
 export class Logout {
     isBlock = true;
@@ -23,7 +23,6 @@ export class Logout {
 
     async logout(e) {
         const refreshToken = AuthTokens.getToken(AuthTokens.refreshTokenKey);
-
 
         const response = await fetch(config.api + '/logout', {
             method: 'POST',
