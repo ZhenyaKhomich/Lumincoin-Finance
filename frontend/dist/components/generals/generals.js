@@ -1,9 +1,6 @@
 import {AuthTokens} from "../utils/auth-utils";
 import {Response} from "../utils/response-utils";
 import {url} from "../../config/config";
-import {EditGeneralOperation} from "./editGeneralOperation";
-import flatpickr from "flatpickr";
-import {Russian} from "flatpickr/dist/l10n/ru";
 import {Period} from "../utils/period";
 import {GetDataUtils} from "../utils/getData-utils";
 import {Main} from "../main";
@@ -11,31 +8,24 @@ import {Main} from "../main";
 
 export class Generals {
     constructor(period) {
+        this.btnsCreate = document.querySelectorAll('.btn-create');
+        this.btnsCreate.forEach(btn => {
+            btn.onclick = function () {
+                console.log(event.target.getAttribute('type'))
+                AuthTokens.setToken('createBtn', event.target.getAttribute('type'));
+            };
+        })
         this.todayData = GetDataUtils.getData();
         this.period = period ? period : `?period=${this.todayData}`;
-        console.log(this.period);
         this.result = null;
         this.wrapperTable = document.getElementById("wrapperGeneralTable");
         this.init().then();
         this.editBtns = null;
-        // this.editBtn.onclick = this.editGeneralOperation.bind(this);
-        // flatpickr("#dataInputFrom", {
-        //     dateFormat: "Y-m-d",
-        //     locale: Russian,
-        // });
-        // flatpickr("#dataInputTo", {
-        //     dateFormat: "Y-m-d",
-        //     locale: Russian,
-        // });
-
-        // this.a = document.getElementById('dataInputFrom');
-        //
-        // this.a.addEventListener('change', e => {
-        //     console.log(this.a.value);
-        // })
         new Period();
+        if(location.pathname === '/') {
+            window.onresize = this.resize.bind(this);
+        }
     }
-
 
     async init() {
         await this.getGeneralsOperationsFromBackend().then();
@@ -44,15 +34,15 @@ export class Generals {
             this.editBtns = document.querySelectorAll('.editGeneralOperation')
             this.editBtns.forEach(editBtn => {
                 editBtn.onclick = this.editGeneralOperation.bind(this);
-                // editBtn.onclick = this.getIdClickElement.bind(this);
             })
 
             this.deleteBtns = document.querySelectorAll('.deleteGeneralOperation')
             this.deleteBtns.forEach(deleteBtn => {
                 deleteBtn.onclick = this.getIdClickElement.bind(this);
             })
+
         } else if (location.pathname === "/") {
-            new Main(this.result);
+            Main.paintDiagramms(this.result);
         }
     }
 
@@ -63,15 +53,11 @@ export class Generals {
             return;
         }
 
-        // '/operations?period=interval&dateFrom=2022-09-11&dateTo=2022-09-13'
-
         const result = await Response.getElementsFromBackend('GET', url.urlGenerals + this.period, accessToken);
         this.result = result;
-        console.log(result)
 
         if (result.error) {
             console.log(`Error: ${result.message}`)
-            return;
         }
     }
 
@@ -127,7 +113,13 @@ export class Generals {
 
             ['category', 'amount', 'date', 'comment'].forEach((key, index) => {
                 const td = document.createElement('td');
-                td.textContent = item[key];
+                if(item[key] === undefined) {
+                    console.log(11111)
+                    td.textContent ='без категории';
+                } else {
+                    td.textContent = item[key];
+                }
+
                 const classes = ['table-row-category', 'table-row-amount', 'table-row-date', 'table-row-comment']
                 td.classList.add(classes[index]);
                 row.appendChild(td);
@@ -178,13 +170,6 @@ export class Generals {
     }
 
     editGeneralOperation() {
-        // document.querySelectorAll('.table-row').forEach((row) => {
-        //     console.log(row);
-        //
-        // })
-
-
-        // console.log(event.target.closest('.table-row'));
         const row = event.target.closest('.table-row');
 
         const rowData = {
@@ -197,7 +182,6 @@ export class Generals {
 
         AuthTokens.setToken('rowData', JSON.stringify(rowData));
         AuthTokens.setToken('idRowGenerals', row.getAttribute('id'))
-        // new EditGeneralOperation(row);
     }
 
     getIdClickElement() {
@@ -205,4 +189,9 @@ export class Generals {
         AuthTokens.setToken('idRowGenerals', idRow)
     }
 
+    resize() {
+        if (window.innerWidth < 1550 && window.innerWidth > 900) {
+            Main.paintDiagramms(this.result);
+        }
+    }
 }

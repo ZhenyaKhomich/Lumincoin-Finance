@@ -1,10 +1,8 @@
 import {AuthTokens} from "./auth-utils";
 import {config} from "../../config/config";
 
-
 export class Response {
     static async getElementsFromBackend(method, url, accessToken, body, params) {
-        // const accessToken = AuthTokens.getToken(AuthTokens.accessTokenKey);
         let headers = {};
 
         if (accessToken) {
@@ -25,11 +23,11 @@ export class Response {
             headers: headers,
         }
 
-        if(body) {
+        if (body) {
             object.body = JSON.stringify(body);
         }
 
-        if(params) {
+        if (params) {
             object.params = JSON.stringify(params);
         }
 
@@ -41,12 +39,18 @@ export class Response {
         }
 
         const result = await response.json();
-        // await AuthTokens.refreshToken();
+
         if (result.error) {
             if (result.message === "jwt expired") {
                 await AuthTokens.refreshToken();
-                // await this.getElementsFromBackend(method, url, accessToken, body);
+                await this.getElementsFromBackend(method, url, accessToken, body);
                 return;
+            } else if (result.message === "Invalid email or password") {
+                return result;
+            } else if (result.message) {
+                await AuthTokens.refreshToken();
+                await this.getElementsFromBackend(method, url, accessToken, body);
+                return result;
             } else {
                 console.log(`Error: ${result.message}`);
                 localStorage.clear();
@@ -54,5 +58,4 @@ export class Response {
         }
         return result;
     }
-
 }

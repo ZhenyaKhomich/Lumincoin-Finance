@@ -6,6 +6,17 @@
   display: flex;
 }
 
+.wrap-buttons {
+  display: flex;
+  flex-wrap: wrap;
+
+  div {
+    button {
+      margin-right: 10px;
+    }
+  }
+}
+
 canvas {
   width: 444px;
 }
@@ -88,9 +99,17 @@ select.form-control {
   width: 397px;
 }
 
+select.form-control option{
+  width: 397px;
+  min-width: 397px;
+  max-width: 397px;
+}
+
 select:focus {
  color: black;
 }
+
+
 
 .dataInput {
   max-width: 90px;
@@ -112,9 +131,24 @@ input.inactive {
   pointer-events: none;
 }
 
-@media screen and (max-width: 1200px) {
+@media screen and (max-width: 1500px) {
   canvas {
-    width: 30vw;
+    width: 28vw;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .wrap-graphics {
+    flex-direction: column;
+   max-height: 800px;
+
+    .graphics-line-block {
+      display: none;
+
+    }
+  }
+  canvas {
+    width: 45vw;
   }
 }
 

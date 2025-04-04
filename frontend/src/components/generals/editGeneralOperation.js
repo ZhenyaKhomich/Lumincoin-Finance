@@ -2,6 +2,8 @@ import {AuthTokens} from "../utils/auth-utils";
 import {Response} from "../utils/response-utils";
 import {Validation} from "../utils/validation";
 import {url} from "../../config/config";
+import flatpickr from "flatpickr";
+import {Russian} from "flatpickr/dist/l10n/ru";
 
 export class EditGeneralOperation {
     constructor(openNewRouteAutomatic, urlRequest, url) {
@@ -20,16 +22,23 @@ export class EditGeneralOperation {
         this.saveBtn.onclick = this.clickBtnEdit.bind(this);
         this.cancelBtn.onclick = this.clickBtnCancel.bind(this);
         this.editElement();
+
+        flatpickr("#dataEditGeneralElement", {
+            dateFormat: "Y-m-d",
+            locale: Russian,
+        });
     }
 
     editElement() {
         this.rowData = JSON.parse(AuthTokens.getToken('rowData'));
         Array.from(this.editTypeElement.options).forEach((item) => {
+
             if(item.textContent === this.rowData.type) {
-                item.setAttribute('selected', 'selected');
+                    item.setAttribute('selected', 'selected');
             } else {
                 item.removeAttribute('selected');
             }
+            this.editTypeElement.setAttribute('disabled', 'disabled');
         })
 
         this.addSelectCategoryValue().then();
@@ -70,13 +79,21 @@ export class EditGeneralOperation {
             this.selects[1].appendChild(option);
         }
 
-        Array.from(this.editCategoryElement.options).forEach((item) => {
-            if(item.textContent === this.rowData.category) {
-                item.setAttribute('selected', 'selected');
-            } else {
-                item.removeAttribute('selected');
-            }
-        })
+        if(this.rowData.category === 'без категории') {
+            const option = document.createElement('option');
+            option.value = '';
+            option.innerText = 'без категории';
+            option.setAttribute('selected', 'selected');
+            this.selects[1].appendChild(option);
+        } else {
+            Array.from(this.editCategoryElement.options).forEach((item) => {
+                if(item.textContent === this.rowData.category) {
+                    item.setAttribute('selected', 'selected');
+                } else {
+                    item.removeAttribute('selected');
+                }
+            })
+        }
     }
 
     async clickBtnEdit() {

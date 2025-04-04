@@ -1,4 +1,3 @@
-import {config} from "../../config/config";
 import {AuthTokens} from "../utils/auth-utils";
 import {Response} from "../utils/response-utils";
 
@@ -31,28 +30,9 @@ export class EditCarts {
 
          const result = await Response.getElementsFromBackend('PUT', this.urlRequest + this.incomeElementId, accessToken, {title: editElementTitle});
 
-        // const response = await fetch(config.api + this.urlRequest + this.incomeElementId, {
-        //     method: 'PUT',
-        //     headers: {
-        //         'Accept': 'application/json',
-        //         'Content-Type': 'application/json',
-        //         'x-auth-token': accessToken,
-        //     },
-        //     body: JSON.stringify({title: editElementTitle})
-        // })
-        //
-        // const result = await response.json();
-        //
-        // if (result.error || !result.title) {
-        //     console.log(`Error: ${result.message}`)
-        //     return;
-        // }
-
         if (result) {
             this.openNewRouteAutomatic(this.url);
         }
-
-
     }
 
     cancelEditElement() {

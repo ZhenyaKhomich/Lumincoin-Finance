@@ -230,7 +230,11 @@ export class Router {
                 try {
                     const result = await Response.getElementsFromBackend('GET', '/balance', AuthTokens.getToken(AuthTokens.accessTokenKey));
 
-                    if (result && typeof result.balance !== 'undefined') {
+                    if(!result.error) {
+                        console.log('Ошибка получения баланса!!!!!');
+                    }
+
+                    if (result && result.balance !== 'undefined') {
                         document.getElementById('userBalance').innerText = result.balance + ' $';
                     } else {
                         document.getElementById('userBalance').innerText = '0 $';
@@ -239,7 +243,6 @@ export class Router {
                     console.error("Ошибка при получении баланса:", error);
                     document.getElementById('userBalance').innerText = 'Ошибка загрузки';
                 }
-
             } else {
                 this.contentElement.innerHTML = '';
             }

@@ -40,7 +40,7 @@ export class SignUp {
                 this.errorSignUp.innerText = '';
             }
 
-            const resultToken = await AuthTokens.getTokensAfterRegistration(result.user.email, date.passwordInputElement);
+            await AuthTokens.getTokensAfterRegistration(result.user.email, date.passwordInputElement);
 
             this.openNewRouteAutomatic('/');
 

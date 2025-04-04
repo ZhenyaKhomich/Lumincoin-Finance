@@ -2,6 +2,8 @@ import {Response} from "../utils/response-utils";
 import {AuthTokens} from "../utils/auth-utils";
 import {url} from "../../config/config";
 import {Validation} from "../utils/validation";
+import flatpickr from "flatpickr";
+import {Russian} from "flatpickr/dist/l10n/ru";
 
 export class CreateGeneralOperation {
     constructor(openNewRouteAutomatic, urlRequest, url) {
@@ -14,38 +16,70 @@ export class CreateGeneralOperation {
         this.btnCreate = document.getElementById("btn-create");
         this.btnCancel = document.getElementById("btn-cancel");
         this.accessToken = AuthTokens.getToken(AuthTokens.accessTokenKey);
+        this.type = AuthTokens.getToken('createBtn');
         this.selects = document.querySelectorAll('select');
         this.selectColorText();
+        this.automaticChoiceType();
         this.btnCancel.onclick = this.clickBtnCancel.bind(this);
         this.btnCreate.onclick = this.clickBtnCreate.bind(this);
+
+        flatpickr("#dataCreateGeneralElement", {
+            dateFormat: "Y-m-d",
+            locale: Russian,
+        });
     }
 
     selectColorText() {
-        this.selects.forEach(select => {
-            select.style.color = '#6c757d';
-
-            select.addEventListener('focus', (e) => {
-                select.style.color = 'black';
-            })
-
-            select.addEventListener('blur', (e) => {
-                if (select.value === '') {
-                    select.style.color = '#6c757d';
-                }
-            })
+        // this.selects.forEach(select => {
+        //     select.style.color = '#6c757d';
+        //
+        //     select.addEventListener('focus', (e) => {
+        //         select.style.color = 'black';
+        //     })
+        //
+        //     select.addEventListener('blur', (e) => {
+        //         if (select.value === '') {
+        //             select.style.color = '#6c757d';
+        //         }
+        //     })
+        // })
+        //
+        // this.selects[0].addEventListener('change', (e) => {
+        //     this.addSelectCategoryValue().then();
+        // })
+        this.selects[1].style.color = '#6c757d';
+        this.selects[0].addEventListener('focus', (e) => {
+            this.selects[0].style.color = 'black';
         })
-        this.selects[0].addEventListener('change', (e) => {
-            this.addSelectCategoryValue().then();
+        this.selects[1].addEventListener('focus', (e) => {
+            this.selects[1].style.color = 'black';
         })
+        this.selects[1].addEventListener('blur', (e) => {
+            if (this.selects[1].value === '') {
+                this.selects[1].style.color = '#6c757d';
+            }
+        })
+    }
+
+    automaticChoiceType() {
+        this.selects[0].querySelectorAll('option').forEach(option => {
+            if (option.value === this.type) {
+                option.selected = true;
+            }
+            this.selects[0].setAttribute('disabled', 'disabled');
+        });
+        this.addSelectCategoryValue().then();
     }
 
     async addSelectCategoryValue() {
         let urlRequest = null;
         this.accessToken = AuthTokens.getToken(AuthTokens.accessTokenKey);
         if (this.selects[0].value === 'income') {
+            console.log('доход')
             urlRequest = url.changeIncomes;
         } else {
             urlRequest = url.changeExpenses;
+            console.log('расход')
         }
         this.element = await Response.getElementsFromBackend('GET', urlRequest, this.accessToken);
         this.createSelectOptionsCategory();
@@ -57,6 +91,8 @@ export class CreateGeneralOperation {
                 option.remove();
             }
         })
+
+        console.log(this.element)
 
         for (let i = 0; i < this.element.length; i++) {
             const option = document.createElement('option');
@@ -79,7 +115,7 @@ export class CreateGeneralOperation {
             }
 
             const result = await Response.getElementsFromBackend('POST', this.urlRequest, this.accessToken, body);
-            if(result) {
+            if (result) {
                 this.openNewRouteAutomatic(this.url);
             }
         }

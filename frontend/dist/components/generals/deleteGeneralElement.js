@@ -27,7 +27,6 @@ export class DeleteGeneralElement {
             console.log(`Error: ${result.message}`)
             return;
         }
-
         this.openNewRouteAutomatic(this.url);
     }
 

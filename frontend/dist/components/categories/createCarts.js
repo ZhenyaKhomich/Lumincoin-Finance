@@ -1,5 +1,4 @@
 import {AuthTokens} from "../utils/auth-utils";
-import {config} from "../../config/config";
 import {Response} from "../utils/response-utils";
 
 export class CreateCart {
@@ -15,45 +14,10 @@ export class CreateCart {
     }
 
     async init() {
-        // await this.getIncomesFromBackend().then();
-        console.log(this.url)
         this.element = await Response.getElementsFromBackend('GET', this.url, this.accessToken);
         this.createCarts();
         this.getIncomeElementValue();
     }
-
-    // async getIncomesFromBackend() {
-    //     const accessToken = AuthTokens.getToken(AuthTokens.accessTokenKey);
-    //     if (!accessToken) {
-    //         console.log('No access token');
-    //         return;
-    //     }
-    //     const response = await fetch(config.api + this.url, {
-    //         method: 'GET',
-    //         headers: {
-    //             'Accept': 'application/json',
-    //             'Content-Type': 'application/json',
-    //             'x-auth-token': accessToken,
-    //         }
-    //     })
-    //
-    //     if (!response.status >= 200 && !response.status < 300) {
-    //         console.log('Error fetching incomes from backend');
-    //         return;
-    //     }
-    //
-    //     const result = await response.json();
-    //     await AuthTokens.refreshToken();
-    //     if (result.error) {
-    //         if (result.message === "jwt expired") {
-    //             await AuthTokens.refreshToken();
-    //             this.getIncomesFromBackend().then();
-    //         } else {
-    //             console.log(`Error: ${result.message}`);
-    //         }
-    //     }
-    //     this.element = result;
-    // }
 
     createCarts() {
         if(this.container === null) {

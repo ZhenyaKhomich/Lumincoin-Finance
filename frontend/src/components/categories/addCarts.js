@@ -7,8 +7,12 @@ export class AddCart {
         this.url = url;
         this.urlRequest = urlRequest;
         this.createBtn = document.getElementById("createCartBtn");
+        this.cancelBtn = document.getElementById("cancelCreateCartBtn");
         this.inputCartValue = document.getElementById("nameCreateIncomeElement");
         this.createBtn.onclick = this.addCart.bind(this);
+        this.cancelBtn.onclick = () => {
+            this.openNewRouteAutomatic(this.url);
+        }
     }
 
     async addCart() {

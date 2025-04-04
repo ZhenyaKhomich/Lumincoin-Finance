@@ -3,14 +3,18 @@ import Chart from 'chart.js/auto';
 
 export class Main {
     constructor() {
+        this.canvas1 = null;
+        this.chartExpenses = null;
+        this.chartIncomes = null;
         new Period();
-        Main.paintDiagramms();
+        // Main.paintDiagramms();
+
     }
 
     static paintDiagramms(result) {
         this.result = result;
-        const canvas1 = document.getElementById('myChart');
-        const canvas2 = document.getElementById('myChart2');
+        this.canvas1 = document.getElementById('myChart');
+        this.canvas2 = document.getElementById('myChart2');
 
         if (this.chartExpenses) {
             this.chartExpenses.destroy();
@@ -30,17 +34,33 @@ export class Main {
         this.result.forEach(item => {
             if (item.type === 'income') {
                 let i = 0;
-                if(!this.categoryIncomes.includes(item.category)) {
+                // if(!this.categoryIncomes.includes(item.category)) {
+                //     this.categoryIncomes.push(item.category);
+                //     this.mapIncomes.set(item.category, item.amount);
+                // } else {
+                //     this.mapIncomes.set(item.category, +this.mapIncomes.get(item.category) + item.amount);
+                // }
+                if(!this.categoryIncomes.includes(item.category) && item.category !== undefined) {
                     this.categoryIncomes.push(item.category);
                     this.mapIncomes.set(item.category, item.amount);
+                }  else if(!this.categoryIncomes.includes('без категории') && item.category === undefined) {
+                    this.categoryIncomes.push('без категории');
+                    this.mapIncomes.set('без категории', item.amount);
+                } else if (this.categoryIncomes.includes('без категории') && item.category === undefined) {
+                    this.mapIncomes.set('без категории', +this.mapIncomes.get('без категории') + item.amount);
                 } else {
                     this.mapIncomes.set(item.category, +this.mapIncomes.get(item.category) + item.amount);
                 }
             } else if (item.type === 'expense') {
                 let i = 0;
-                if(!this.categoryExpenses.includes(item.category)) {
+                if(!this.categoryExpenses.includes(item.category) && item.category !== undefined) {
                     this.categoryExpenses.push(item.category);
                     this.mapExpenses.set(item.category, item.amount);
+                }  else if(!this.categoryExpenses.includes('без категории') && item.category === undefined) {
+                    this.categoryExpenses.push('без категории');
+                    this.mapExpenses.set('без категории', item.amount);
+                } else if (this.categoryExpenses.includes('без категории') && item.category === undefined) {
+                    this.mapExpenses.set('без категории', +this.mapExpenses.get('без категории') + item.amount);
                 } else {
                     this.mapExpenses.set(item.category, +this.mapExpenses.get(item.category) + item.amount);
                 }
@@ -56,7 +76,7 @@ export class Main {
         })
 
 
-        this.chartIncomes = new Chart(canvas1, {
+        this.chartIncomes = new Chart(this.canvas1, {
             type: 'pie',
             data: {
                 labels: this.categoryIncomes,
@@ -84,7 +104,7 @@ export class Main {
         });
 
 
-        this.chartExpenses = new Chart(canvas2, {
+        this.chartExpenses = new Chart(this.canvas2, {
             type: 'pie',
             data: {
                 labels: this.categoryExpenses,

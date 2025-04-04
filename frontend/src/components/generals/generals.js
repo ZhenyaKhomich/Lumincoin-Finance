@@ -8,6 +8,13 @@ import {Main} from "../main";
 
 export class Generals {
     constructor(period) {
+        this.btnsCreate = document.querySelectorAll('.btn-create');
+        this.btnsCreate.forEach(btn => {
+            btn.onclick = function () {
+                console.log(event.target.getAttribute('type'))
+                AuthTokens.setToken('createBtn', event.target.getAttribute('type'));
+            };
+        })
         this.todayData = GetDataUtils.getData();
         this.period = period ? period : `?period=${this.todayData}`;
         this.result = null;
@@ -15,8 +22,10 @@ export class Generals {
         this.init().then();
         this.editBtns = null;
         new Period();
+        if(location.pathname === '/') {
+            window.onresize = this.resize.bind(this);
+        }
     }
-
 
     async init() {
         await this.getGeneralsOperationsFromBackend().then();
@@ -104,7 +113,13 @@ export class Generals {
 
             ['category', 'amount', 'date', 'comment'].forEach((key, index) => {
                 const td = document.createElement('td');
-                td.textContent = item[key];
+                if(item[key] === undefined) {
+                    console.log(11111)
+                    td.textContent ='без категории';
+                } else {
+                    td.textContent = item[key];
+                }
+
                 const classes = ['table-row-category', 'table-row-amount', 'table-row-date', 'table-row-comment']
                 td.classList.add(classes[index]);
                 row.appendChild(td);
@@ -172,5 +187,11 @@ export class Generals {
     getIdClickElement() {
         const idRow = event.target.closest('.table-row').getAttribute('id');
         AuthTokens.setToken('idRowGenerals', idRow)
+    }
+
+    resize() {
+        if (window.innerWidth < 1550 && window.innerWidth > 900) {
+            Main.paintDiagramms(this.result);
+        }
     }
 }

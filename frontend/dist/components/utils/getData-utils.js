@@ -8,7 +8,7 @@ export class GetDataUtils {
 
         function addZeroData(data) {
             if(data < 10) {
-                return data = '0' + data;
+                return '0' + data;
             }
             return data;
         }

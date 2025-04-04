@@ -8,7 +8,6 @@ export class Period {
         this.perionBtns = document.querySelectorAll('.btn-period');
         this.activeButton = null;
         this.today = new Date();
-
         this.perionBtns.forEach(button => {
             button.onclick = this.clickPeriodButton.bind(this);
         })
