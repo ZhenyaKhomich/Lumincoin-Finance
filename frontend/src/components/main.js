@@ -34,12 +34,6 @@ export class Main {
         this.result.forEach(item => {
             if (item.type === 'income') {
                 let i = 0;
-                // if(!this.categoryIncomes.includes(item.category)) {
-                //     this.categoryIncomes.push(item.category);
-                //     this.mapIncomes.set(item.category, item.amount);
-                // } else {
-                //     this.mapIncomes.set(item.category, +this.mapIncomes.get(item.category) + item.amount);
-                // }
                 if(!this.categoryIncomes.includes(item.category) && item.category !== undefined) {
                     this.categoryIncomes.push(item.category);
                     this.mapIncomes.set(item.category, item.amount);

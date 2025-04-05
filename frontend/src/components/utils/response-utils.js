@@ -48,8 +48,7 @@ export class Response {
             } else if (result.message === "Invalid email or password") {
                 return result;
             } else if (result.message) {
-                await AuthTokens.refreshToken();
-                await this.getElementsFromBackend(method, url, accessToken, body);
+                localStorage.clear();
                 return result;
             } else {
                 console.log(`Error: ${result.message}`);

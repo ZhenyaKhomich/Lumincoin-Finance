@@ -11,7 +11,6 @@ export class Generals {
         this.btnsCreate = document.querySelectorAll('.btn-create');
         this.btnsCreate.forEach(btn => {
             btn.onclick = function () {
-                console.log(event.target.getAttribute('type'))
                 AuthTokens.setToken('createBtn', event.target.getAttribute('type'));
             };
         })
