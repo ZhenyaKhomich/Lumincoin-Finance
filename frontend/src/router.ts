@@ -14,8 +14,13 @@ import {EditGeneralOperation} from "./components/generals/editGeneralOperation";
 import {CreateGeneralOperation} from "./components/generals/createGeneralOperation";
 import {DeleteGeneralElement} from "./components/generals/deleteGeneralElement";
 import {Layout} from "./components/layout";
+import {RoutesType, UserInfoType} from "./types/router.type";
 
 export class Router {
+    readonly titlePageElement: HTMLElement | null;
+    readonly contentElement: HTMLElement | null;
+    private routes: RoutesType[];
+
     constructor() {
         this.titlePageElement = document.getElementById('page-title');
         this.contentElement = document.getElementById('content');
@@ -29,8 +34,7 @@ export class Router {
                 filePathTemplate: '/templates/main.html',
                 useLayout: '/templates/layout.html',
                 load: () => {
-                    new Generals()
-                    // new Main();
+                    new Generals();
                 },
             },
             {
@@ -171,30 +175,33 @@ export class Router {
         ]
     }
 
-    initEvents() {
+    private initEvents(): void {
         window.addEventListener("DOMContentLoaded", this.activateRoute.bind(this));
         window.addEventListener("popstate", this.activateRoute.bind(this));
         document.addEventListener('click', this.openNewRouteToClick.bind(this));
         this.refreshTokenAutomatic();
     }
 
-    async openNewRouteAutomatic(url) {
+    private async openNewRouteAutomatic(url: string): Promise<void> {
         history.pushState(null, '', url);
         await this.activateRoute().then();
     }
 
-    async openNewRouteToClick(e) {
-        let element = null;
-        if (e.target.nodeName === 'A') {
+    private async openNewRouteToClick(e: Event): Promise<void> {
+        let element: EventTarget | null = null;
+        if ((e.target as HTMLAnchorElement).nodeName === 'A') {
             element = e.target;
-        } else if (e.target.parentNode.nodeName === 'A') {
-            element = e.target.parentNode;
+        } else if ((e.target as HTMLAnchorElement).parentNode) {
+            const parentElement = (e.target as HTMLAnchorElement).parentNode as HTMLElement;
+            if (parentElement.nodeName === 'A') {
+                element = (e.target as HTMLAnchorElement).parentNode;
+            }
         }
 
         if (element) {
             e.preventDefault();
-            const url = element.href.replace(window.location.origin, '');
-            if (!element.href || element.href === '#' || element.href === 'javascript:void(0)') {
+            const url = (element as HTMLAnchorElement).href.replace(window.location.origin, '');
+            if (!(element as HTMLAnchorElement).href || (element as HTMLAnchorElement).href === '#' || (element as HTMLAnchorElement).href === 'javascript:void(0)') {
                 return;
             }
             await this.openNewRouteAutomatic(url);
@@ -202,8 +209,8 @@ export class Router {
     }
 
     async activateRoute() {
-        const urlRoute = window.location.pathname;
-        let newRoute = null;
+        const urlRoute: string = window.location.pathname;
+        let newRoute: RoutesType | undefined;
         if (localStorage.getItem("accessToken")) {
             this.refreshTokenAutomatic();
             newRoute = this.routes.find((route) => route.route === urlRoute);
@@ -219,39 +226,60 @@ export class Router {
 
         if (newRoute) {
             if (newRoute.title) {
-                this.titlePageElement.innerText = newRoute.title + '| Lumincoin Finance';
+                if (this.titlePageElement) {
+                    this.titlePageElement.innerText = newRoute.title + '| Lumincoin Finance';
+                }
             }
 
             if (newRoute.useLayout) {
-                this.contentElement.innerHTML = await fetch(newRoute.useLayout).then(res => res.text());
-                const userInfo = JSON.parse(localStorage.getItem("userInfo"));
-                document.getElementById('layoutUserName').innerText = userInfo.name;
+                if (this.contentElement) {
+                    this.contentElement.innerHTML = await fetch(newRoute.useLayout).then(res => res.text());
+                    const userInfoJson: string | null = localStorage.getItem("userInfo");
+                    if (userInfoJson) {
+                        const userInfo: UserInfoType = JSON.parse(userInfoJson);
+                        const layoutUserNameElement: HTMLElement | null = document.getElementById('layoutUserName');
+                        if (layoutUserNameElement) {
+                            layoutUserNameElement.innerText = userInfo.name;
+                        }
+                    }
+                }
+
+                const userBalanceElement: HTMLElement | null = document.getElementById('userBalance');
 
                 try {
-                    const result = await Response.getElementsFromBackend('GET', '/balance', AuthTokens.getToken(AuthTokens.accessTokenKey));
+                    const accessToken: string | null = AuthTokens.getToken(AuthTokens.accessTokenKey);
+                    if (accessToken) {
+                        const result = await Response.getElementsFromBackend('GET', '/balance', accessToken);
 
-                    if(!result.error) {
-                        console.log('Ошибка получения баланса!!!!!');
-                    }
+                        if (!result.error) {
+                            console.log('Ошибка получения баланса!!!!!');
+                        }
 
-                    if (result && result.balance !== 'undefined') {
-                        document.getElementById('userBalance').innerText = result.balance + ' $';
-                    } else {
-                        document.getElementById('userBalance').innerText = '0 $';
+                        if (result && result.balance !== 'undefined' && userBalanceElement) {
+                            userBalanceElement.innerText = result.balance + ' $';
+                        } else {
+                            if (userBalanceElement) {
+                                userBalanceElement.innerText = '0 $';
+                            }
+                        }
                     }
                 } catch (error) {
                     console.error("Ошибка при получении баланса:", error);
-                    document.getElementById('userBalance').innerText = 'Ошибка загрузки';
+                    if (userBalanceElement) {
+                        userBalanceElement.innerText = 'Ошибка загрузки';
+                    }
                 }
             } else {
-                this.contentElement.innerHTML = '';
+                if(this.contentElement) {
+                    this.contentElement.innerHTML = '';
+                }
             }
 
-            if (newRoute.filePathTemplate) {
+            if (newRoute.filePathTemplate && this.contentElement) {
                 this.contentElement.innerHTML += await fetch(newRoute.filePathTemplate).then(res => res.text());
             }
 
-            if (newRoute.usePopup) {
+            if (newRoute.usePopup && this.contentElement) {
                 this.contentElement.innerHTML += await fetch(newRoute.usePopup).then(res => res.text());
             }
 
@@ -265,7 +293,7 @@ export class Router {
             }
 
         } else {
-            window.location = '/404';
+            window.location.href = '/404';
         }
     }
 

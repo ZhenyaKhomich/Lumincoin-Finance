@@ -4,7 +4,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const flatpickr = require("flatpickr");
 
 module.exports = {
-    entry: './src/app.js',
+    entry: './src/app.ts',
     mode: 'development',
     devServer: {
         static: {
@@ -43,7 +43,15 @@ module.exports = {
                     "sass-loader",
                 ],
             },
+            {
+                test: /\.tsx?$/,
+                use: 'ts-loader',
+                exclude: /node_modules/,
+            },
         ],
+    },
+    resolve: {
+        extensions: ['.tsx', '.ts', '.js'],
     },
     output: {
         filename: 'index.js',
